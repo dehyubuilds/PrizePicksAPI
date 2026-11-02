@@ -209,6 +209,7 @@ describe("daily prop engine", () => {
       remaining: 10,
       props: [priced],
     });
+    assert.equal(before.legs[0].projectionId, priced.projectionId);
     const after = toSnapshot({
       generatedAt: "2026-10-09T15:00:00.000Z",
       modelVersion: "market-median-v1",

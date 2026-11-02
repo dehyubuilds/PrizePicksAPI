@@ -196,17 +196,28 @@ async function main() {
   const projectionById = new Map(eligible.map((projection) => [projection.id, projection]));
   const oddsLegs = oddsSnapshot?.legs ?? [];
   const ranked = [
-    ...oddsLegs.map((leg) => projectionById.get(leg.id)).filter(Boolean),
+    ...oddsLegs.map((leg) => projectionById.get(leg.projectionId)).filter(Boolean),
     ...eligible,
   ];
-  const unique = [...new Map(ranked.map((projection) => [projection.id, projection])).values()]
+  const seenPlayerStats = new Set();
+  const unique = ranked
+    .filter((projection) => {
+      const key = [
+        projection.playerName.trim().toLowerCase(),
+        normalizeStat(projection.statDisplayName || projection.statType),
+      ].join("|");
+      if (seenPlayerStats.has(key)) return false;
+      seenPlayerStats.add(key);
+      return true;
+    })
     .slice(0, options.maxCandidates);
   if (!unique.length) throw new Error("No eligible future NBA points, rebounds, or assists projections were found");
 
   const kalshiContext = kalshiForBundle(kalshiMarkets, cutoff);
   const candidates = unique.map((projection) => {
-    const leg = oddsLegs.find((row) => row.id === projection.id);
-    const probability = leg?.marketProbability;
+    const leg = oddsLegs.find((row) => row.projectionId === projection.id);
+    const probability =
+      leg?.marketProbability == null ? undefined : leg.marketProbability / 100;
     const lineObserved = safeTimestamp(projection.updatedAt || persisted.snapshot.observedAt, cutoff, cutoff);
     return {
       candidateId: `candidate_${projection.id}`,

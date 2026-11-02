@@ -6,6 +6,7 @@ export const SNAPSHOT_DIR = path.resolve(process.cwd(), "tmp/prizepicks-odds/sna
 
 export type SnapshotLeg = {
   id: string;
+  projectionId: string;
   sport: string;
   label: string;
   line: number;
@@ -58,6 +59,7 @@ export function toSnapshot(params: {
       .filter((prop) => prop.dataQuality === "market" || prop.dataQuality === "interpolated")
       .map((prop) => ({
         id: prop.id,
+        projectionId: prop.projectionId,
         sport: prop.sport,
         label: prop.label,
         line: prop.line,
