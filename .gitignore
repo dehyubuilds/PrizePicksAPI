@@ -1,2 +1,7 @@
 node_modules
 .env
+.env.local
+.DS_Store
+tmp/
+artifacts/prizepicks/
+scripts/prizepicks/cookie-paste.txt

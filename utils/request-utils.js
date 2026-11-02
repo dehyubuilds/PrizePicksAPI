@@ -3,7 +3,7 @@
  * Includes caching, throttling, and identity rotation mechanisms
  */
 
-const axios = require('axios');
+import axios from 'axios';
 
 // Rate limiting configuration - Randomized to appear more natural
 const MIN_REQUEST_DELAY = 300; // Minimum delay between requests (ms)
@@ -330,9 +330,9 @@ const smartGet = async (url, options = {}, rotateIdentity = true, profileType) =
   }
 };
 
-module.exports = {
+export {
   axiosInstance,
   smartGet,
   throttle,
-  generateBrowserFingerprint
+  generateBrowserFingerprint,
 };

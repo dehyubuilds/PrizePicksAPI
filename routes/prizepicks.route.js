@@ -1,12 +1,17 @@
-const express = require("express");
-const router = express.Router()
-const { getLeagues, getProjections, getLeagueProjections } = require("../controllers/prizepicks.controller") // Import getLeagueProjections
+import express from "express";
+import {
+  getLeagues,
+  getProjections,
+  getLeagueProjections,
+} from "../controllers/prizepicks.controller.js";
 
-router.get("/leagues", getLeagues)
+const router = express.Router();
 
-router.get("/projections", getProjections)
+router.get("/leagues", getLeagues);
+
+router.get("/projections", getProjections);
 
 // Add a route for specific league projections using a route parameter :leagueId
-router.get("/projections/:leagueId", getLeagueProjections)
+router.get("/projections/:leagueId", getLeagueProjections);
 
-module.exports = router;
+export default router;

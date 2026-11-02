@@ -1,4 +1,5 @@
-const { smartGet } = require("../utils/request-utils");
+import { smartGet } from "../utils/request-utils.js";
+
 const BASE_URL = process.env.BASE_URL;
 
 // Add this check early
@@ -234,8 +235,8 @@ const getLeagueProjections = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getLeagues,
   getProjections,
-  getLeagueProjections 
+  getLeagueProjections,
 };

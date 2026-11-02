@@ -1,21 +1,57 @@
 {
   "name": "prizepicksapi",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "prizepicks:trim-cookie": "python3 scripts/prizepicks/trim-browser-cookie.py",
+    "prizepicks:pull": "node --import tsx scripts/prizepicks-pull.mjs",
+    "prizepicks:snapshot": "node --import tsx scripts/prizepicks-snapshot.mjs",
+    "sports-daily:collect": "node --import tsx scripts/sports-daily-collect.mjs",
+    "prizepicks:flex32": "node --import tsx scripts/prizepicks-flex32.mjs",
+    "prizepicks:picks": "node --import tsx scripts/prizepicks-edge.mjs",
+    "prizepicks:edge": "node --import tsx scripts/prizepicks-edge.mjs",
+    "prizepicks:odds": "node --import tsx scripts/prizepicks-odds.mjs",
+    "picks:daily": "node --import tsx scripts/prizepicks-odds.mjs --mode daily",
+    "prizepicks:intelligence": "node --import tsx scripts/prizepicks-intelligence.mjs",
+    "prizepicks:news": "node --import tsx scripts/prizepicks-news.mjs",
+    "prizepicks:audit": "node --import tsx scripts/prizepicks-audit.mjs",
+    "prizepicks:valorant": "node --import tsx scripts/prizepicks-valorant.mjs",
+    "prizepicks:picks:on": "bash scripts/prizepicks-picks-schedule-on.sh",
+    "prizepicks:picks:off": "bash scripts/prizepicks-picks-schedule-off.sh",
+    "prizepicks:picks:status": "bash scripts/prizepicks-picks-schedule-status.sh",
+    "test:prizepicks-flex32": "node --import tsx --test tests/prizepicks-flex32.test.ts",
+    "test:prizepicks-odds": "node --import tsx --test tests/prizepicks-odds.test.ts tests/prizepicks-daily.test.ts tests/prizepicks-research.test.ts tests/prizepicks-best-picks.test.ts tests/prizepicks-moneyline.test.ts",
+    "test:prizepicks-edge": "node --import tsx --test tests/prizepicks-edge.test.ts",
+    "test:prizepicks-valorant": "node --import tsx --test tests/prizepicks-valorant.test.ts",
+    "test:prizepicks-audit": "node --import tsx --test tests/prizepicks-audit.test.ts",
+    "test:prizepicks-news": "node --import tsx --test tests/prizepicks-news.test.ts",
+    "test:prizepicks-intelligence": "node --import tsx --test tests/prizepicks-intelligence.test.ts",
+    "test:sports-daily": "node --import tsx --test tests/sports-daily.test.ts",
+    "test": "npm run test:prizepicks-odds && npm run test:prizepicks-flex32 && npm run test:prizepicks-intelligence && npm run test:prizepicks-news && npm run test:prizepicks-audit && npm run test:prizepicks-valorant && npm run test:prizepicks-edge && npm run test:sports-daily"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "PrizePicks scraper API plus Odds API / xAI Grok research CLIs",
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1009.0",
+    "@aws-sdk/client-s3": "^3.700.0",
+    "@aws-sdk/lib-dynamodb": "^3.1009.0",
     "axios": "^1.8.4",
     "cheerio": "^1.0.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
-    "nodemon": "^3.1.10"
+    "https-proxy-agent": "^5.0.1",
+    "nodemon": "^3.1.10",
+    "sharp": "^0.33.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "tsx": "^4.22.4",
+    "typescript": "^5.6.3"
   }
 }

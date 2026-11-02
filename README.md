@@ -1,35 +1,63 @@
 # PrizePicksAPI
 
-> A lightweight RESTful API for retrieving PrizePicks game and player data via web scraping.
+Standalone PrizePicks tooling:
 
-## Overview
+1. **Express scraper API** (`npm start`) — game/player lines via scraping
+2. **CLI research stack** — PrizePicks board + [The Odds API](https://the-odds-api.com/) sportsbook consensus + [xAI Grok](https://console.x.ai) web/X search
 
-PrizePicksAPI is built with Node.js and Express and provides endpoints to fetch game lines, player props, and more from the PrizePicks platform. It leverages Axios for HTTP requests and Cheerio for parsing and extracting relevant information.
+Copied from the Dropflow monorepo so Odds / Grok scripts run here without the music product.
 
-## Architecture
+## Setup
 
-- **index.js**: Entry point; initializes the server, middleware, and routes.
-- **routes/prizepicks.route.js**: Defines all public API routes.
-- **controllers/prizepicks.controller.js**: Contains request handlers and orchestrates data retrieval.
-- **leagues/prizepicks.leagues.js**: Implements scraping logic for various sports leagues.
+```bash
+cd ~/Desktop/PrizePicksAPI
+cp .env.example .env.local
+# Fill THE_ODDS_API_KEY, XAI_API_KEY, optional PRIZEPICKS_BROWSER_COOKIE
+npm install
+```
 
-## Tech Stack
+Scripts also fall back to `../Dropflow/.env.local` and `../Statics/.env.local` if keys are already there.
 
-- **Node.js** (JavaScript runtime)
-- **Express** (web framework)
-- **Axios** (HTTP client)
-- **Cheerio** (HTML parser)
-- **dotenv** (environment variable management)
-- **nodemon** (development auto-reload)
+## CLI (Odds API + Grok)
 
-## Environment & Configuration
+```bash
+npm run prizepicks:pull                 # live PrizePicks board
+npm run prizepicks:odds -- --estimate   # Odds API credit estimate (no spend)
+npm run prizepicks:odds                 # props vs sportsbooks
+npm run picks:daily                     # daily mode (Grok research when configured)
+npm run prizepicks:intelligence         # slate intelligence + Grok
+npm run prizepicks:news                 # news / X research path
+npm run prizepicks:audit                # market auditor
+npm run prizepicks:valorant             # Valorant intelligence
+npm run prizepicks:flex32               # Flex 3–2 helper
+npm run prizepicks:edge                 # edge scan (Kalshi/Polymarket optional)
+npm run prizepicks:trim-cookie          # trim browser cookie paste
+```
 
-Environment variables (managed through a `dotenv` setup) allow customization of endpoints, timeouts, and other runtime settings without changing code.
+Grok uses xAI Responses with `web_search` and `x_search` tools (`src/lib/xai/client.ts`). Cap spend with `--max-grok-spend` and set `XAI_USD_PER_RESEARCH`.
 
-## Development & Style
+## Express API
 
-This project embraces modular design and a clear separation of concerns, making it easy to maintain and extend. Prettier is used for consistent code formatting, and comments are reserved for explaining non-obvious decisions.
+```bash
+npm run dev    # nodemon
+npm start      # node index.js
+```
 
-## License
+## Tests
 
-ISC
+```bash
+npm test
+# or: npm run test:prizepicks-odds
+```
+
+## Layout
+
+```
+index.js / routes / controllers / leagues   # original Express API
+src/lib/prizepicks*                         # board client + research modules
+src/lib/xai                                 # Grok client
+src/lib/prizepicks-odds                     # The Odds API consensus
+scripts/prizepicks-*.mjs                    # CLI entrypoints
+docs/PRIZEPICKS_*.md                        # design notes
+tests/                                      # unit tests
+```
